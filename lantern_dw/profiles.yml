@@ -1,0 +1,6 @@
+lantern_dw:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /workspaces/dw-lantern/lantern_dw/transactions.duckdb

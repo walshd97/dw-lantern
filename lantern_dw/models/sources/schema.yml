@@ -1,0 +1,202 @@
+
+version: 2
+
+models:
+  - name: 01_cleaned_transactions
+    description: "Renaming columns in `new_transactions` table to match `transactions` then unions them together. Also renames transactions of TitanTech to The Titan Tech"
+    columns:
+      - name: company_cleaned
+        description: "Name of company"
+        tests:
+          - not_null
+      - name: date
+        description: "Date of transaction"
+      - name: transaction_type
+        description: "Type of transaction, values include 'Sales of Item', 'Upkeep Cost', 'Buy Item Cost'"
+      - name: amount
+        description: "Transaction amount"
+      - name: number  
+        description: "Number of transactions"
+
+  - name: 01_cleaned_fund_info
+    description: "Cleaning the company information table to match it with the cleaned transactions table"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company_cleaned
+        description: "Cleaned name of company"
+        tests:
+          - not_null
+      - name: fund
+        description: "Name of fund"
+        tests:
+          - not_null
+      - name: invested
+        description: "Value invested"
+
+  - name: 01_company_report_cleaned
+    description: "Adding additional columns to company report table to make it easier for analysis"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company
+        description: "Name of company"
+        tests:
+          - not_null
+      - name: year_quarter
+        description: "Concatanation of the year and the quarter in format YYYY_qq"
+      - name: quarter
+        description: "Quarter the report is for. Values are q1, q2, q3, q4"
+      - name: year
+        description: "Year of the company quarterly report"
+      - name: quarter_start_date
+        description: "The first date of the quarter"
+      - name: sales_amount
+        description: "Total sales for the company in the quarter"
+      - name: buy_cost_amount
+        description: "Total buy/cost amount for the company in the quarter"
+      - name: total_revenue
+        description: "Total revenue for the company in the quarter"
+      - name: total_cost
+        description: "Total cost for the company in the quarter"
+      - name: total_profit
+        description: "Total profit/loss for the company in the quarter"
+
+  - name: 02_company_performance_validation
+    description: "Comparing what the company has reported vs what the actual transactions show"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company
+        description: "Name of company"
+        tests:
+          - not_null
+      - name: year_quarter
+        description: "Concatanation of the year and the quarter in format YYYY_qq"
+      - name: actual_sales_amount
+        description: "Total sales for the company in the quarter based on the transactions"
+      - name: actual_buy_cost_amount
+        description: "Total buy cost for the company in the quarter based on the transactions"
+      - name: actual_total_revenue
+        description: "Total revenue for the company in the quarter based on the transactions"
+      - name: actual_total_cost
+        description: "Total cost for the company in the quarter based on the transactions"
+      - name: actual_total_profit
+        description: "Total profit/loss for the company in the quarter based on the transactions"
+      - name: reported_total_revenue
+        description: "Total revenue for the company in the quarter based on the company reports"
+      - name: reported_total_cost
+        description: "Total cost for the company in the quarter based on the company reports"
+      - name: reported_total_profit
+        description: "Total profit/loss for the company in the quarter based on the company reports"
+ 
+  - name: 02_company_comparison
+    description: "Comparing annual performance for each company based on the company reports"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company
+        description: "Name of company"
+        tests:
+          - not_null
+      - name: year
+        description: "Yearly annual reports"
+      - name: total_yearly_profit
+        description: "Total profit/loss for the company in the year"
+        
+  - name: 02_company_growth
+    description: "Using the new_company_report to gather insights on growth of the various companys across each year"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company
+        description: "Company name"
+        tests:
+          - not_null
+      - name: quarter_start_date
+        description: "Start of quarter date"
+      - name: sales_amount
+        description: "Total sales for the quarter"
+      - name: sales_growth
+        description: "Quarter on quarter sales growth for the company"
+      - name: total_profit
+        description: "Total profit for the quarter"
+      - name: profit_growth
+        description: "Quarter on quarter profit growth for the company"
+
+  - name: 02_correct_company_report
+    description: "Details about the actual quarterly company performance using `transactions"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company
+        description: "Company name"
+        tests:
+          - not_null
+      - name: quarter
+        description: "The quarter the report is for. Values are YYYY_q1, YYYY_q2, YYYY_q3, YYYY_q4"
+      - name: sales_amount
+        description: "Total reported sales for the quarter"
+      - name: buy_cost_amount
+        description: "Total buying cost for the quarter"
+      - name: total_cost
+        description: "Total reported cost for the quarter"
+      - name: total_revenue
+        description: "Total revenue for the fund"
+  
+  - name: 02_updated_company_report
+    description: "Details about the quarterly company performance using `new_transactions"
+    columns:
+      - name: company_id
+        description: "Distinct ID for a company"
+        tests:
+          - not_null
+      - name: company
+        description: "Company name"
+        tests:
+          - not_null
+      - name: quarter
+        description: "The quarter the report is for. Values are YYYY_q1, YYYY_q2, YYYY_q3, YYYY_q4"
+      - name: sales_amount
+        description: "Total reported sales for the quarter"
+      - name: buy_cost_amount
+        description: "Total buying cost for the quarter"
+      - name: total_cost
+        description: "Total reported cost for the quarter"
+      - name: total_revenue
+        description: "Total revenue for the fund"
+
+  - name: 02_fund_performance
+    description: "Details of the fund performance throughout the year"
+    columns:
+      - name: fund
+        description: "Name of fund"
+        tests:
+          - not_null
+      - name: invested
+        description: "Total invested amount for the fund"
+      - name: inflow
+        description: "Total inflow amount for the fund from the transactions"
+      - name: outflow
+        description: "Total outflow amount for the fund from the transactions"
+      - name: final_balance
+        description: "Final balance for the fund after inflow and outflow"
+  
+  
+
+
+
+
+  

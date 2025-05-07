@@ -1,0 +1,72 @@
+sources:
+  - name: transactions              # This is the schema or database name in DuckDB
+    description: "Raw data tables from the DuckDB database"
+    schema: main
+    tables:
+      - name: new_transactions
+        description: "New transactions data with company renamed"
+        columns:
+          - name: Company
+            description: "Company name"
+            tests:
+              - not_null
+          - name: date
+            description: "Date of transaction"
+          - name: Transaction Type
+            description: "Type of transaction (e.g. buy, sell)"
+          - name: amount
+            description: "Transaction amount"
+          - name: Number
+            description: "Number of items involved in transaction"
+      - name: transactions
+        description: "Initial transactions table with transactions throughout the year"
+        columns:
+          - name: company
+            description: "Company name"
+            tests:
+              - not_null
+          - name: date
+            description: "Date of transaction"
+          - name: transaction_type
+            description: "Type of transaction (e.g. buy, sell)"
+          - name: amount
+            description: "Transaction amount"
+          - name: number
+            description: "Number of items involved in transaction"
+      - name: fund_info
+        description: "Information about different funds"
+        columns:
+          - name: company_id
+            description: "Distinct ID for a company"
+            tests:
+              - not_null
+          - name: company
+            description: "Company name"
+            tests:
+              - not_null
+          - name: fund
+            description: "Name of fund"
+          - name: invested
+            description: "Value invested"
+      - name: company_report
+        description: "Details about quarterly company performance"
+        columns:
+          - name: company_id
+            description: "Distinct ID for a company"
+            tests:
+              - not_null
+          - name: company
+            description: "Company name"
+            tests:
+              - not_null
+          - name: quarter
+            description: "Start of quarter date"
+          - name: sales_amount
+            description: "Total reported sales for the quarter"
+          - name: buy_cost_amount
+            description: "Total buying cost for the quarter"
+          - name: total_cost
+            description: "Total reported cost for the quarter"
+          - name: total_revenue
+            description: "Total revenue for the fund"
+
